@@ -4,6 +4,9 @@ This year in Ruby 2.7.
 
 ## Usage
 
+This repo has a `.ruby-version` file, which is used by [rbenv](https://github.com/rbenv/rbenv).
+You could use this to have the correct Ruby version.
+
 Install the required gems:
 
 ```sh
