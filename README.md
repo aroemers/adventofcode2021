@@ -10,13 +10,13 @@ Install the required gems:
 bundle install
 ```
 
-Run a puzzle spec for a specific day:
+Run puzzle specs for a specific day:
 
 ```sh
-bundle exec rspec day01_spec.rb
+bundle exec rspec day01
 ```
 
-Or run the specs for all days:
+Run specs for all days:
 
 ```sh
 bundle exec rspec .
