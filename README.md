@@ -1,6 +1,6 @@
 # Advent of Code 2021
 
-This year in Ruby 2.7.
+This year in Ruby (2.7).
 
 ## Usage
 
