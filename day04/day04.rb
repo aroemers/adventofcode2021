@@ -18,7 +18,7 @@ class Board
   end
 
   def score
-    @lines.reduce(0) { |s, board_line| s + board_line.reject(&:nil?).sum }
+    @lines.flatten.reject(&:nil?).sum
   end
 end
 
