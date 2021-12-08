@@ -29,23 +29,29 @@ end
 
 ### Part 2
 
-def intersects(signal, chars, expected_count)
-  signal.chars.intersection(chars).size == expected_count
+class String
+  def overlap(other)
+    chars.intersection(other.chars).size
+  end
+
+  def sort
+    chars.sort.join
+  end
 end
 
 def encoding(signals)
-  one = signals.find { |signal| signal.size == 2 }.chars
-  seven = signals.find { |signal| signal.size == 3 }.chars
-  four = signals.find { |signal| signal.size == 4 }.chars
-  eight = signals.find { |signal| signal.size == 7 }.chars
+  one = signals.find { |signal| signal.size == 2 }
+  seven = signals.find { |signal| signal.size == 3 }
+  four = signals.find { |signal| signal.size == 4 }
+  eight = signals.find { |signal| signal.size == 7 }
 
-  two = signals.find { |signal| signal.size == 5 && intersects(signal, four, 2) }.chars
-  three = signals.find { |signal| signal.size == 5 && intersects(signal, one, 2) }.chars
-  five = signals.find { |signal| signal.size == 5 && intersects(signal, four, 3) && intersects(signal, one, 1) }.chars
+  two = signals.find { |signal| signal.size == 5 and signal.overlap(four) == 2 }
+  three = signals.find { |signal| signal.size == 5 and signal.overlap(one) == 2 }
+  five = signals.find { |signal| signal.size == 5 and signal.overlap(four) == 3 and signal.overlap(one) == 1 }
 
-  six = signals.find { |signal| signal.size == 6 && intersects(signal, one, 1) }.chars
-  nine = signals.find { |signal| signal.size == 6 && intersects(signal, four, 4) }.chars
-  zero = signals.find { |signal| signal.size == 6 && intersects(signal, four, 3) && intersects(signal, one, 2) }.chars
+  six = signals.find { |signal| signal.size == 6 and signal.overlap(one) == 1 }
+  nine = signals.find { |signal| signal.size == 6 and signal.overlap(four) == 4 }
+  zero = signals.find { |signal| signal.size == 6 and signal.overlap(four) == 3 and signal.overlap(one) == 2 }
 
   [zero, one, two, three, four, five, six, seven, eight, nine].collect(&:sort)
 end
@@ -55,7 +61,7 @@ def solve2(filename)
   lines.inject(0) do |sum, line|
     codes = encoding line[:signals]
     sum + line[:outputs].collect do |output|
-      codes.find_index output.chars.sort
+      codes.find_index output.sort
     end.join.to_i
   end
 end
