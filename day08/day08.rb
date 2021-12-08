@@ -3,16 +3,13 @@
 ### Reading and parsing input
 
 def read_input(filename)
-  lines = []
-
-  File.readlines(filename, chomp: true).each do |line|
+  File.readlines(filename, chomp: true).collect do |line|
     signal_part, output_part = line.split('|')
     signals = signal_part.split(' ').collect(&:strip)
     outputs = output_part.split(' ').collect(&:strip)
-    lines << { signals: signals, outputs: outputs }
-  end
 
-  lines
+    { signals: signals, outputs: outputs }
+  end
 end
 
 ### Part 1
