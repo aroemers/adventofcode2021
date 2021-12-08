@@ -1,15 +1,21 @@
 # frozen_string_literal: true
 
+### Reading and parsing input
+
 def read_input(filename)
   lines = []
+
   File.readlines(filename, chomp: true).each do |line|
     signal_part, output_part = line.split('|')
     signals = signal_part.split(' ').collect(&:strip)
     outputs = output_part.split(' ').collect(&:strip)
     lines << { signals: signals, outputs: outputs }
   end
+
   lines
 end
+
+### Part 1
 
 UNIQUE_COUNTS = [2, 3, 4, 7].freeze
 
@@ -20,6 +26,8 @@ def solve1(filename)
     end
   end
 end
+
+### Part 2
 
 def intersects(signal, chars, expected_count)
   signal.chars.intersection(chars).size == expected_count
@@ -38,6 +46,7 @@ def encoding(signals)
   six = signals.find { |signal| signal.size == 6 && intersects(signal, one, 1) }.chars
   nine = signals.find { |signal| signal.size == 6 && intersects(signal, four, 4) }.chars
   zero = signals.find { |signal| signal.size == 6 && intersects(signal, four, 3) && intersects(signal, one, 2) }.chars
+
   [zero, one, two, three, four, five, six, seven, eight, nine].collect(&:sort)
 end
 
