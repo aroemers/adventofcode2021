@@ -23,7 +23,7 @@ end
 
 def low_point?(grid, y, x)
   height = grid[y][x]
-  around(grid, y, x).all? { |yy, xx| height < grid[yy][xx] }
+  around(grid, y, x).all? { |y, x| height < grid[y][x] }
 end
 
 def low_points(grid)
@@ -50,12 +50,6 @@ end
 
 ### Part 2
 
-module Enumerable
-  def multiply
-    inject { |a, b| a * b }
-  end
-end
-
 def basin(grid, start_y, start_x)
   found = Set[]
   inspect = Set[[start_y, start_x]]
@@ -64,13 +58,13 @@ def basin(grid, start_y, start_x)
     new = Set[]
 
     inspect.each do |y, x|
+      found << [y, x]
       around(grid, y, x).each do |point|
         y, x = point
-        new << point unless grid[y][x] == 9 || found.include?(point) || inspect.include?(point)
+        new << point unless grid[y][x] == 9 || found.include?(point)
       end
     end
 
-    found |= inspect
     inspect = new
   end
 
@@ -81,5 +75,5 @@ def solve2(filename)
   grid = read_input filename
   points = low_points grid
   basins = points.collect { |y, x| basin grid, y, x }
-  basins.collect(&:size).sort.last(3).multiply
+  basins.collect(&:size).sort.last(3).inject(:*)
 end
