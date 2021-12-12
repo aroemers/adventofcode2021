@@ -22,14 +22,14 @@ def large_cave?(cave)
   cave.upcase == cave
 end
 
-def paths(graph, visiting, rule, rule_state)
+def paths(graph, visiting, twice_available)
   from = visiting.last
   return [visiting] if from == 'end'
 
   graph[from].flat_map do |to|
-    new_rule_state = rule.call rule_state, visiting, to
-    if new_rule_state
-      paths(graph, visiting.dup.push(to), rule, new_rule_state)
+    may_visit = large_cave?(to) || !visiting.include?(to)
+    if to != 'start' && (may_visit || twice_available)
+      paths(graph, visiting.dup.push(to), twice_available && may_visit)
     else
       []
     end
@@ -37,27 +37,13 @@ def paths(graph, visiting, rule, rule_state)
 end
 
 def solve1(filename)
-  rule = proc { |_state, visiting, to| large_cave?(to) || !visiting.include?(to) }
-
   graph = read_input filename
-  paths(graph, ['start'], rule, nil).size
+  paths(graph, ['start'], false).size
 end
 
 ### Part 2
 
 def solve2(filename)
-  rule = proc do |state, visiting, to|
-    if to == 'start'
-      nil
-    elsif large_cave? to
-      state
-    elsif visiting.include? to
-      { twice: true } unless state[:twice]
-    else
-      state
-    end
-  end
-
   graph = read_input filename
-  paths(graph, ['start'], rule, { twice: false }).size
+  paths(graph, ['start'], true).size
 end
