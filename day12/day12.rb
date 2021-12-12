@@ -18,38 +18,46 @@ end
 
 ### Part 1
 
-def small_cave?(cave)
-  cave.downcase == cave
+def large_cave?(cave)
+  cave.upcase == cave
 end
 
-def paths(graph, visiting, cannot_visit)
+def paths(graph, visiting, rule, rule_state)
   from = visiting.last
   return [visiting] if from == 'end'
 
-  visit = graph[from].reject { |to| cannot_visit.call(visiting, to) }
-  visit.flat_map { |to| paths(graph, visiting.dup.push(to), cannot_visit) }
+  graph[from].flat_map do |to|
+    new_rule_state = rule.call rule_state, visiting, to
+    if new_rule_state
+      paths(graph, visiting.dup.push(to), rule, new_rule_state)
+    else
+      []
+    end
+  end
 end
 
 def solve1(filename)
+  rule = proc { |_state, visiting, to| large_cave?(to) || !visiting.include?(to) }
+
   graph = read_input filename
-  cannot_visit = proc { |visiting, cave| (small_cave? cave) && (visiting.include? cave) }
-  paths(graph, ['start'], cannot_visit).size
+  paths(graph, ['start'], rule, nil).size
 end
 
 ### Part 2
 
 def solve2(filename)
-  graph = read_input filename
-  cannot_visit = proc do |visiting, cave|
-    if cave == 'start'
-      true
-    elsif !small_cave? cave
-      false
+  rule = proc do |state, visiting, to|
+    if to == 'start'
+      nil
+    elsif large_cave? to
+      state
+    elsif visiting.include? to
+      { twice: true } unless state[:twice]
     else
-      small_visited = visiting.select { |visited| small_cave? visited }
-      small_double = small_visited.tally.find { |_cave, count| count > 1 }
-      small_double && cave == small_double.first || small_double && visiting.include?(cave)
+      state
     end
   end
-  paths(graph, ['start'], cannot_visit).size
+
+  graph = read_input filename
+  paths(graph, ['start'], rule, { twice: false }).size
 end
