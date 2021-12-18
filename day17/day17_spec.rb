@@ -13,6 +13,6 @@ RSpec.describe 'Solving day 17' do
     expect(solve2('day17/example.txt')).to eq(112)
   end
   it 'should calculate the input for part 2' do
-    expect(solve2('day17/input.txt')).to eq(0)
+    expect(solve2('day17/input.txt')).to eq(5523)
   end
 end
