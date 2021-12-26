@@ -1,4 +1,4 @@
-# frozen_string_literal: truee
+# frozen_string_literal: true
 
 require_relative 'day10'
 
@@ -13,6 +13,6 @@ RSpec.describe 'Solving day 10' do
     expect(solve2('day10/example.txt')).to eq(288_957)
   end
   it 'should calculate the input for part 2' do
-    expect(solve2('day10/input.txt')).to eq(4263222782)
+    expect(solve2('day10/input.txt')).to eq(4_263_222_782)
   end
 end
